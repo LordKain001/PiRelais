@@ -1,7 +1,7 @@
 sudo apt update
 sudo apt upgrade
 sudo apt update
-sudo apt install apache2
+sudo apt install apache2 php php-mbstring mysql-server php-mysql  -y
 
 
 test:
@@ -9,8 +9,22 @@ sudo chown -R pi:www-data /var/www/html/
 sudo chmod -R 770 /var/www/html/
 wget -O check_apache.html http://127.0.0.1
 cat ./check_apache.html
-sudo apt install php php-mbstring
 
 
+---add php info to webserver---
 sudo rm /var/www/html/index.html
 echo "<?php phpinfo ();?>" > /var/www/html/index.php
+
+
+sudo mysql --user=root
+
+DROP USER 'root'@'localhost';
+CREATE USER 'root'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost'
+
+user=root --password=yourmysqlpassword
+
+
+sudo apt install phpmyadmin -y
+
+sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
