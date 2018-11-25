@@ -1,0 +1,16 @@
+sudo apt update
+sudo apt upgrade
+sudo apt update
+sudo apt install apache2
+
+
+test:
+sudo chown -R pi:www-data /var/www/html/
+sudo chmod -R 770 /var/www/html/
+wget -O check_apache.html http://127.0.0.1
+cat ./check_apache.html
+sudo apt install php php-mbstring
+
+
+sudo rm /var/www/html/index.html
+echo "<?php phpinfo ();?>" > /var/www/html/index.php
