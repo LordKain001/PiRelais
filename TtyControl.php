@@ -44,8 +44,7 @@ if (!class_exists('ttyControl')) {
 		fclose($this->stream);
 		}
 		
-		
-		
+
 		
 
 	}
@@ -53,14 +52,7 @@ if (!class_exists('ttyControl')) {
 }
 
 
-$comPort = new ttyControl("/dev/ttyUSB0");
 
-while (true) {
-	sleep(2);
-	echo $comPort->getData();	# code...
-
-	var_dump($comPort);
-}
 
 
 
