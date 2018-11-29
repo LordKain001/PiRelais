@@ -18,9 +18,10 @@ if (!class_exists('adamControl')) {
 
 		public function getStatus($adress = 0)
 		{
+			$log = "";
 			if (($adress == 0) && (!is_null($this->adams)))
 			{
-				$log = "";
+				
 				foreach ($this->adams as  &$value) 
 				{
 					$data = sprintf("$%02X6\r",$value["adress"]);

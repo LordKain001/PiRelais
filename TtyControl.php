@@ -18,7 +18,7 @@ if (!class_exists('ttyControl')) {
 		public function getData()
 		{
 			$buffer = "";
-			$buffer .= fgets($this->stream);
+			$buffer .= stream_get_contents($this->stream);
 			if ($buffer != "") {
 				//$buffer .= "\n";	# code...
 			}
