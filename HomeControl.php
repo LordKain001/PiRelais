@@ -1,6 +1,6 @@
 <?php
 
-include "AdamControl.php";
+include "./AdamControl/AdamControl.php";
 include "./HomeControl/HomeControlDatabase.php"
 
 	

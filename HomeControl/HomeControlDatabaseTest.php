@@ -1,7 +1,7 @@
 <?php
 
 include 'HomeControlDatabase.php';
-include "../AdamControl.php";
+include "../AdamControl/AdamControl.php";
 
 $adam = new adamControl("/dev/ttyUSB0");
 
@@ -18,10 +18,10 @@ while(1)
 {
 	for ($i=0; $i < 4; $i++) { 
 		echo $adam->controlOutput(1,$i,1);
-		$db->updateAdmas($adam->reportAdams(1));
+		$db->updateAdams($adam->reportAdams(1));
 		sleep(1);
 		echo $adam->controlOutput(1,$i,0);
-		$db->updateAdmas($adam->reportAdams(1));
+		$db->updateAdams($adam->reportAdams(1));
 	}
 }
 

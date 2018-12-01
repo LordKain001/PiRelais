@@ -1,6 +1,7 @@
 <?php
 
-include "TtyControl.php";
+include __DIR__ . "/../TtyControl/TtyControl.php";
+
 
 if (!class_exists('adamControl')) {
 
