@@ -77,6 +77,7 @@ if (!class_exists('adamControl')) {
 
 		public function reportAdams($verbose = 0)
 		{
+			$this->getStatus(0);
 			$value = $this->adams;
 			switch ($verbose) {
 				case 0:
