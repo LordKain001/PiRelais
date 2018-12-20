@@ -26,21 +26,18 @@ if (!class_exists('adamControl')) {
 				foreach ($this->adams as  &$value) 
 				{
 					$data = sprintf("$%02X6\r",$value["adress"]);
-					$this->ComPort->writeData($data);
-					sleep(1);
-					$received = trim($this->ComPort->getData());
-					$log .= "Sent [ " . trim($data) . " ] received:[ " . $received . " ]\r\n";	
-					$value["value"] = $received;
-					sleep(0.2);
+					$received = $this->adamCommand($data);
+					$value["value"] = $this->interpretDigitalDataIn($received, $value["type"]);
+
+					$log .= "Sent [ " . trim($data) . " ] received:[ " . $received . " ] -->value= " . $value["value"] . "\r\n";
+		
 				}
 							
 			}					
 			else
 			{
 				$data = sprintf("$%02X6\r",$adress);
-				$this->ComPort->writeData($data);
-				sleep(1);
-				$received = trim($this->ComPort->getData());
+				$received = $this->adamCommand($data);
 				$log .= "Sent [ " . trim($data) . " ] received:[ " . $received . " ]\r\n";	
 
 			}
@@ -56,11 +53,9 @@ if (!class_exists('adamControl')) {
 			for ($i=$startAdress; $i <= $endAdress; $i++) 
 			{ 
 				$data = "$" . sprintf("%02X",$i) . "M\r";
-				$this->ComPort->writeData($data);	
-				sleep(1);
-				$received = $this->ComPort->getData();
+				$received = $this->adamCommand($data);
 				$expr = "/!". sprintf("%02X",$i) . "..../";
-				echo "loocking for:" . $expr . " in " . $received . "\r\n";
+				echo "looking for:" . $expr . " in " . $received . "\r\n";
 				if (!empty($received)) 
 				{					
 					if (preg_match($expr, $received)) 
@@ -76,10 +71,20 @@ if (!class_exists('adamControl')) {
 			}
 		}
 
-		public function reportAdams($verbose = 0)
+		public function reportAdams($verbose = 0, $type = "")
 		{
 			$this->getStatus(0);
 			$value = $this->adams;
+			if (!empty($type)) 
+			{
+				$value = array_filter($value, function($v) use ($type) 
+					{
+						return ($v["type"] == $type);
+					});
+			}
+
+
+
 			switch ($verbose) {
 				case 0:
 					break;
@@ -101,13 +106,40 @@ if (!class_exists('adamControl')) {
 
 		public function controlOutput($adress, $outputnumber,$value)
 		{
-			$data = "#" . sprintf("%02X",$adress) . "1" . $outputnumber ."0" . $value ."\r";
-			$this->ComPort->writeData($data);
-			sleep(1);
-			$received = trim($this->ComPort->getData());
+			$data = "#" . sprintf("%02X",$adress) . "1" . $outputnumber ."0" . $value ."\r";			
+			$received = $this->adamCommand($data);
 			$log = "Sent [ " . trim($data) . " ] received:[ " . $received . " ]\r\n";
 
 			return $log;		
+		}
+
+		private function interpretDigitalDataIn($received, $type)
+		{
+			$value = $received;
+			switch ($type) {
+				case '4060':
+					$value = sprintf("%08b",base_convert(substr($received,2,1), 16, 10));
+					break;
+				case '4053':
+					$value = sprintf("%08b",base_convert(substr($received,1,2), 16, 10));
+					$value .= ";";
+					$value .= sprintf("%08b",base_convert(substr($received,3,2), 16, 10));
+					break;
+				
+				default:
+					
+					break;
+			}
+			return $value;
+		}
+
+		private function adamCommand($data)
+		{
+			$received = "";
+			$this->ComPort->writeData($data);
+			usleep(10000);
+			$received = trim($this->ComPort->getData());
+			return $received;
 		}
 
 		

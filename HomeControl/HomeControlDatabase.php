@@ -14,6 +14,93 @@ if (!class_exists('homeControlDatabase'))
       $this->mysqli = new mysqli("127.0.0.1", "root", "passwort", "HomeControl");
     }
 
+    public function createEvent($eventType, $adam)
+    {
+      $sql="";
+      switch ($eventType) {
+        case 'DataIn':
+          $sql .= "INSERT INTO DataIn (Type,Adresse,Data) VALUES ('$adam[type]','$adam[adress]','$adam[value]');\n";
+          break;
+
+        case 'Switch':
+          
+          break;
+        
+        default:
+          # code...
+          break;
+      }
+      if (!empty($sql)) 
+      {
+        $this->multiquerry($sql);
+      }      
+      
+    }
+
+
+    public function GetDataIn()
+    {
+      return $this->GetMySqlData("DataIn", "*", "`Done`=0");
+    }
+
+    public function AckDataIn($sqlGetDataIn)
+    {
+       $sql="";
+
+       foreach ($sqlGetDataIn as $key => $value) 
+       {
+         $sql .= "UPDATE DataIn  SET Done=1 WHERE Primekey='$value[Primekey]';\n";
+       }                    
+      
+              
+      if (!empty($sql)) 
+      {
+        $this->multiquerry($sql);
+      }   
+      
+    }
+
+
+ public function SetSwitchCommand($sqlSwitchCommands)
+    {
+       $sql="";
+
+       foreach ($sqlSwitchCommands as $key => $value) 
+       {
+         $sql .= "INSERT INTO Switch (Adresse,Port,Value) VALUES ('$value[Adresse]','$value[Port]','$value[value]');\n";
+       }                    
+      
+              
+      if (!empty($sql)) 
+      {
+        $this->multiquerry($sql);
+      }   
+      
+    }
+    public function GetSwitchCommand()
+    {
+      return $sqlSwitchCommands = $this->GetMySqlData("Switch", "*", "`Done`=0");
+    }
+
+    public function AckSwitchCommand($switchCommands)
+    {
+       $sql="";
+
+       foreach ($switchCommands as $key => $value) 
+       {
+         $sql .= "UPDATE Switch  SET Done=1 WHERE Primekey='$value[Primekey]';\n";
+       }                    
+      
+              
+      if (!empty($sql)) 
+      {
+        $this->multiquerry($sql);
+      }   
+      
+    }
+    
+
+
     public function updateAdams($adams)
     {
       $sql="";
@@ -27,7 +114,7 @@ if (!class_exists('homeControlDatabase'))
 
     public function reportAdams()
     {
-      return $sqlAdams = $this->GetMySqlData("Adam");
+      return $this->GetMySqlData("Adam");
     }
 
     private function multiquerry($sql="")

@@ -12,16 +12,23 @@ echo("<PRE>");
 var_dump($data);
 echo("</PRE>");
 
-
-
 ?>
 
 <!DOCTYPE html>
 <html>
 <body>
 
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
+<h2>JavaScript in Body</h2>
+
+<p id="demo">A Paragraph.</p>
+
+<button type="button" onclick="myFunction()">Try it</button>
+
+<script>
+function myFunction() {
+    document.getElementById("demo").innerHTML = "Paragraph changed.";
+}
+</script>
 
 </body>
-</html>
+</html> 

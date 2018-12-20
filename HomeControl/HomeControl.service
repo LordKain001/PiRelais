@@ -1,0 +1,23 @@
+[Unit]
+Description=Homecontrol
+
+
+[Service]
+User=root
+Type=simple
+TimeoutSec=0
+#Restart=on-failure
+#RestartPreventExitStatus=1
+#PrivateTmp=false
+#PIDFile=/var/run/php_app_sync.pid
+
+WorkingDirectory=/var/www/html/PiRelais/HomeControl
+ExecStart=/bin/sh -c '/usr/bin/php -f /var/www/html/PiRelais/HomeControl/HomeControl.php'
+KillMode=control-group
+#ExecStop=
+
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+Requires=network-online.target
