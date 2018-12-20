@@ -10,7 +10,7 @@ if (!class_exists('ttyControl')) {
 
 		function __construct($ttyDevice)
 		{
-		exec("stty -F " . $ttyDevice . "115200 raw  -echo -echok -echoe onlret inlcr icrnl");
+		exec("stty -F " . $ttyDevice ." ". "115200 raw  -echo -echok -echoe onlret inlcr icrnl");
 		$this->stream = fopen($ttyDevice, "r+b");
 		stream_set_blocking($this->stream, false);
 		}
